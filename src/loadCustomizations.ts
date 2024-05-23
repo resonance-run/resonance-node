@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+import { parse } from 'cookie';
 import { EVENT_TYPE, triggerEvent } from './events/index.js';
 import { getCustomizationsFori18next } from './i18next/index.js';
 
@@ -13,11 +15,23 @@ export type CustomizationResult = {
   };
 };
 
-export const loadCustomizations = async <K>(type: string, userData: K) => {
+const PREVIEW_COOKIE_NAME = 'resonance.preview';
+
+export const loadCustomizations = async <K>(type: string, userData: K, request?: Request) => {
   try {
+    let previewOverrideCookie;
+    if (typeof window === 'object') {
+      previewOverrideCookie = Cookies.get(PREVIEW_COOKIE_NAME);
+    } else {
+      const parsedCookies = parse(request.headers.get('cookie') || '');
+      previewOverrideCookie = parsedCookies?.[PREVIEW_COOKIE_NAME];
+      previewOverrideCookie = previewOverrideCookie ? encodeURIComponent(previewOverrideCookie) : undefined;
+    }
     const baseUrl = `http://localhost:4500`;
     const encodedUserData = encodeURIComponent(JSON.stringify(userData));
-    const fullUrl = `${baseUrl}/customizations?userData=${encodedUserData}&customizationType=${type}`;
+    const fullUrl = `${baseUrl}/customizations?userData=${encodedUserData}&customizationType=${type}${
+      previewOverrideCookie ? `&previewOverrides=${previewOverrideCookie}` : ''
+    }`;
     const res = await fetch(fullUrl);
     const data: Record<string, CustomizationResult> = await res.json();
     Object.entries(data).forEach(([surfaceId, customization]) => {
@@ -39,7 +53,7 @@ export const loadCustomizations = async <K>(type: string, userData: K) => {
   }
 };
 
-export const loadCustomizationDataForI18Next = async <K>(type: string, userData: K) => {
-  const customizationData = await loadCustomizations(type, userData);
+export const loadCustomizationDataForI18Next = async <K>(type: string, userData: K, request?: Request) => {
+  const customizationData = await loadCustomizations(type, userData, request);
   return getCustomizationsFori18next(customizationData);
 };

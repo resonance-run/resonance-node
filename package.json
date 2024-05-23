@@ -12,6 +12,8 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
+    "cookie": "^0.6.0",
+    "js-cookie": "^3.0.5",
     "typescript": "^5.4.3"
   }
 }
