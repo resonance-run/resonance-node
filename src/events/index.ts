@@ -18,7 +18,6 @@ const listeners: Record<EVENT_TYPE, AmpEventListener[]> = {
   [EVENT_TYPE.IMPRESSION]: [],
 };
 export const addListener = (eventType: EVENT_TYPE, listener: AmpEventListener) => {
-  console.log('add a listener');
   listeners[eventType].push(listener);
 };
 
