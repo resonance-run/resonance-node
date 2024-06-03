@@ -3,7 +3,7 @@ import { parse } from 'cookie';
 import { EVENT_TYPE, triggerEvent } from './events/index.js';
 import { getCustomizationsFori18next } from './i18next/index.js';
 const PREVIEW_COOKIE_NAME = 'resonance.preview';
-export const loadCustomizations = async (type, userData, request) => {
+export const loadCustomizations = async (type, userData, baseUrl, request) => {
     try {
         let previewOverrideCookie;
         if (typeof window === 'object') {
@@ -14,7 +14,6 @@ export const loadCustomizations = async (type, userData, request) => {
             previewOverrideCookie = parsedCookies?.[PREVIEW_COOKIE_NAME];
             previewOverrideCookie = previewOverrideCookie ? encodeURIComponent(previewOverrideCookie) : undefined;
         }
-        const baseUrl = `http://localhost:4523`;
         const encodedUserData = encodeURIComponent(JSON.stringify(userData));
         const fullUrl = `${baseUrl}/customizations?userData=${encodedUserData}&customizationType=${type}${previewOverrideCookie ? `&previewOverrides=${previewOverrideCookie}` : ''}`;
         const res = await fetch(fullUrl);
@@ -38,7 +37,7 @@ export const loadCustomizations = async (type, userData, request) => {
         return {};
     }
 };
-export const loadCustomizationDataForI18Next = async (type, userData, request) => {
-    const customizationData = await loadCustomizations(type, userData, request);
+export const loadCustomizationDataForI18Next = async (type, userData, baseUrl, request) => {
+    const customizationData = await loadCustomizations(type, userData, baseUrl, request);
     return getCustomizationsFori18next(customizationData);
 };
