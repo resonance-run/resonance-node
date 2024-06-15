@@ -1,6 +1,13 @@
 import { CustomizationResult } from '../loadCustomizations.js';
 
-export const getCustomizationsFori18next = (customizationData: Record<string, CustomizationResult>) => {
+export interface CustomizationResource {
+  [lang: string]: {
+    [namespace: string]: Record<string, unknown>;
+  };
+}
+export const getCustomizationsFori18next = (
+  customizationData: Record<string, CustomizationResult>
+): CustomizationResource => {
   const entries = Object.entries(customizationData);
   return entries.reduce((res, [key, customization]) => {
     const lang = customization.locale || 'en';

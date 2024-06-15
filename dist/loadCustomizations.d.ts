@@ -12,4 +12,4 @@ export type CustomizationResult = {
     };
 };
 export declare const loadCustomizations: <K>(type: string, userData: K, baseUrl: string, request?: Request) => Promise<Record<string, CustomizationResult>>;
-export declare const loadCustomizationDataForI18Next: <K>(type: string, userData: K, baseUrl: string, request?: Request) => Promise<{}>;
+export declare const loadCustomizationDataForI18Next: <K>(type: string, userData: K, baseUrl: string, request?: Request) => Promise<import("./i18next/index.js").CustomizationResource>;
