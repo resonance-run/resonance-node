@@ -13,11 +13,6 @@ export default class Resonance {
     }
     async loadCustomizationDataForI18Next({ type, userData, request, i18nextInstance, }) {
         const customizationResources = await loadCustomizationDataForI18Next(type, userData, this.baseUrl, request);
-        Object.entries(customizationResources).forEach(([lang, langResource]) => {
-            Object.entries(langResource).forEach(([namespace, namespaceResource]) => {
-                i18nextInstance.addResourceBundle(lang || 'en', namespace, namespaceResource, true, true);
-            });
-        });
         return customizationResources;
     }
     customizationToFieldsObject(customization) {

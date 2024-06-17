@@ -23,19 +23,12 @@ export default class Resonance {
     type,
     userData,
     request,
-    i18nextInstance,
   }: {
     type: string;
     userData: K;
     request?: Request;
-    i18nextInstance: i18n;
   }) {
     const customizationResources = await loadCustomizationDataForI18Next<K>(type, userData, this.baseUrl, request);
-    Object.entries(customizationResources).forEach(([lang, langResource]) => {
-      Object.entries(langResource).forEach(([namespace, namespaceResource]) => {
-        i18nextInstance.addResourceBundle(lang || 'en', namespace, namespaceResource, true, true);
-      });
-    });
     return customizationResources;
   }
 
