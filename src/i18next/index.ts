@@ -2,7 +2,7 @@ import { CustomizationResult } from '../loadCustomizations.js';
 
 export interface CustomizationResource {
   [lang: string]: {
-    [namespace: string]: Record<string, unknown>;
+    [namespace: string]: Record<string, string>;
   };
 }
 export const getCustomizationsFori18next = (

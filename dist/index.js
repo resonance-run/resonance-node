@@ -11,7 +11,7 @@ export default class Resonance {
     loadCustomizations(type, userData, request) {
         return loadCustomizations(type, userData, this.baseUrl, request);
     }
-    async loadCustomizationDataForI18Next({ type, userData, request, i18nextInstance, }) {
+    async loadCustomizationDataForI18Next({ type, userData, request, }) {
         const customizationResources = await loadCustomizationDataForI18Next(type, userData, this.baseUrl, request);
         return customizationResources;
     }
