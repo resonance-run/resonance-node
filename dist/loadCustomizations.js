@@ -12,7 +12,9 @@ export const loadCustomizations = async (type, userData, baseUrl, request) => {
         else {
             const parsedCookies = parse(request.headers.get('cookie') || '');
             previewOverrideCookie = parsedCookies?.[PREVIEW_COOKIE_NAME];
-            previewOverrideCookie = previewOverrideCookie ? encodeURIComponent(previewOverrideCookie) : undefined;
+            previewOverrideCookie = previewOverrideCookie
+                ? encodeURIComponent(previewOverrideCookie)
+                : undefined;
         }
         const encodedUserData = encodeURIComponent(JSON.stringify(userData));
         const fullUrl = `${baseUrl}/customizations?userData=${encodedUserData}&customizationType=${type}${previewOverrideCookie ? `&previewOverrides=${previewOverrideCookie}` : ''}`;

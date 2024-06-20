@@ -1,5 +1,5 @@
 export type CustomizationResult = {
-    id: number;
+    id: string;
     locale?: string;
     customizationTypeId: string;
     surfaceId: string;
