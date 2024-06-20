@@ -25,9 +25,11 @@ export const triggerGAImpressionEvent = async ({ gaTrackingId, gaAPISecret, gaCl
     }
 };
 export const triggerGABrowserImpressionEvent = (customization, userId, gtag) => {
-    gtag('event', IMPRESSION_EVENT_NAME, {
-        customization_id: customization.id,
-        variation_id: customization.variation.id,
-        user_id: userId,
-    });
+    if (gtag && typeof gtag === 'function') {
+        gtag('event', IMPRESSION_EVENT_NAME, {
+            customization_id: customization.id,
+            variation_id: customization.variation.id,
+            user_id: userId,
+        });
+    }
 };
