@@ -1,18 +1,18 @@
-import { loadCustomizations, loadCustomizationDataForI18Next, CustomizationResult } from './loadCustomizations.js';
+import {
+  loadCustomizations,
+  CustomizationResult,
+} from './loadCustomizations.js';
 import { customizationToFieldsObject } from './util/index.js';
-import { triggerGABrowserImpressionEvent, triggerGAImpressionEvent } from './google-analytics/index.js';
-import { getCustomizationsFori18next } from './i18next/index.js';
-
-export { loadCustomizations, loadCustomizationDataForI18Next } from './loadCustomizations.js';
-
-export { addListener as addAmpEventListener, EVENT_TYPE } from './events/index.js';
-
-export { customizationToFieldsObject } from './util/index.js';
+import {
+  triggerGABrowserImpressionEvent,
+  triggerGAImpressionEvent,
+} from './google-analytics/index.js';
 
 export default class Resonance {
   baseUrl: string;
   gaTrackingId: string;
   gaAPISecret: string;
+  private isBrowser = typeof window === 'object';
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
@@ -23,48 +23,58 @@ export default class Resonance {
     this.gaAPISecret = APISecret;
   }
 
-  loadCustomizations({ type, userData, request }: { type: string; userData: unknown; request?: Request }) {
-    return loadCustomizations(type, userData, this.baseUrl, request);
-  }
-
-  async loadCustomizationDataForI18Next<K>({
+  loadCustomizations({
     type,
     userData,
     request,
   }: {
     type: string;
-    userData: K;
+    userData: unknown;
     request?: Request;
   }) {
-    const customizationResources = await loadCustomizationDataForI18Next<K>(type, userData, this.baseUrl, request);
-    return customizationResources;
-  }
-
-  customizationsToi18nextObject(customizations: Record<string, CustomizationResult>) {
-    return getCustomizationsFori18next(customizations);
+    return loadCustomizations(type, userData, this.baseUrl, request);
   }
 
   customizationToFieldsObject(customization: CustomizationResult) {
     return customizationToFieldsObject(customization);
   }
 
-  triggerGAImpressionEvent(customization: CustomizationResult, gaClientId: string, userId: string | number) {
-    if (!this.gaAPISecret || this.gaTrackingId) {
+  triggerGAImpressionEvent({
+    customization,
+    userId,
+    gaClientId,
+    gtag,
+  }: {
+    customization: CustomizationResult;
+    userId: string | number;
+    gaClientId?: string;
+    gtag?: (...args: any[]) => void;
+  }) {
+    if (this.isBrowser) {
+      if (gtag && typeof gtag === 'function') {
+        return triggerGABrowserImpressionEvent(customization, userId, gtag);
+      }
       console.warn(
-        'GA Credentials have not been added. Please use `.initGA(trackingId, APISecret)` before making this call.'
+        'gtag is required and must be a function when calling this method in the browser',
       );
-      return;
+      return false;
     }
-    return triggerGAImpressionEvent({
-      gaTrackingId: this.gaTrackingId,
-      gaAPISecret: this.gaAPISecret,
-      gaClientId,
-      userId,
-      customization,
-    });
-  }
-
-  triggerGABrowserImpressionEvent(customization: CustomizationResult, userId, gtag) {
-    triggerGABrowserImpressionEvent(customization, userId, gtag);
+    if (this.gaAPISecret && this.gaTrackingId) {
+      if (gaClientId) {
+        return triggerGAImpressionEvent({
+          gaTrackingId: this.gaTrackingId,
+          gaAPISecret: this.gaAPISecret,
+          gaClientId,
+          userId,
+          customization,
+        });
+      }
+      console.warn('gaClientId is required when calling this method in Node');
+      return false;
+    }
+    console.warn(
+      'GA Credentials have not been added. Please use `.initGA(trackingId, APISecret)` before making this call.',
+    );
+    return false;
   }
 }

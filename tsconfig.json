@@ -4,7 +4,10 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "types": ["vitest/globals"],
+    "skipLibCheck": true,
+    "noEmit": true
   },
   "include": [
     "src/**/*.ts"
