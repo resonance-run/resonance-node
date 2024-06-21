@@ -23,7 +23,7 @@ export const triggerGAImpressionEvent = async ({
           client_id: gaClientId,
           events: [
             {
-              name: 'resonance_impression',
+              name: IMPRESSION_EVENT_NAME,
               params: {
                 customization_id: customization.id,
                 variation_id: customization.variation.id,
@@ -32,7 +32,7 @@ export const triggerGAImpressionEvent = async ({
             },
           ],
         }),
-      }
+      },
     );
     return 'success';
   } catch (error) {
@@ -41,12 +41,22 @@ export const triggerGAImpressionEvent = async ({
   }
 };
 
-export const triggerGABrowserImpressionEvent = (customization: CustomizationResult, userId, gtag) => {
+export const triggerGABrowserImpressionEvent = async (
+  customization: CustomizationResult,
+  userId,
+  gtag,
+) => {
   if (gtag && typeof gtag === 'function') {
-    gtag('event', IMPRESSION_EVENT_NAME, {
-      customization_id: customization.id,
-      variation_id: customization.variation.id,
-      user_id: userId,
-    });
+    try {
+      await gtag('event', IMPRESSION_EVENT_NAME, {
+        customization_id: customization.id,
+        variation_id: customization.variation.id,
+        user_id: userId,
+      });
+      return 'success';
+    } catch (error) {
+      console.error('Error emitting GA Tracking event', error);
+      return 'error';
+    }
   }
 };

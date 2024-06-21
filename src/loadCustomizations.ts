@@ -1,7 +1,5 @@
 import Cookies from 'js-cookie';
 import { parse } from 'cookie';
-import { EVENT_TYPE, triggerEvent } from './events/index.js';
-import { getCustomizationsFori18next } from './i18next/index.js';
 
 export type CustomizationResult = {
   id: string;
@@ -40,16 +38,6 @@ export const loadCustomizations = async <K>(
     }`;
     const res = await fetch(fullUrl);
     const data: Record<string, CustomizationResult> = await res.json();
-    Object.entries(data).forEach(([surfaceId, customization]) => {
-      triggerEvent(EVENT_TYPE.IMPRESSION, {
-        type: EVENT_TYPE.IMPRESSION,
-        payload: {
-          variationId: customization.variation.id,
-          timestamp: new Date(),
-          userData,
-        },
-      });
-    });
     return data;
   } catch (error) {
     console.log('We had an error');
@@ -57,19 +45,4 @@ export const loadCustomizations = async <K>(
     console.error(error);
     return {};
   }
-};
-
-export const loadCustomizationDataForI18Next = async <K>(
-  type: string,
-  userData: K,
-  baseUrl: string,
-  request?: Request,
-) => {
-  const customizationData = await loadCustomizations(
-    type,
-    userData,
-    baseUrl,
-    request,
-  );
-  return getCustomizationsFori18next(customizationData);
 };
