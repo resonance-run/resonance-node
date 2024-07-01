@@ -101,8 +101,8 @@ describe('loadCustomizations', () => {
       request,
     );
     expect(customizations).toStrictEqual({
-      customizations: undefined,
-      userData: undefined,
+      customizations: {},
+      userData: {},
     });
   });
 });

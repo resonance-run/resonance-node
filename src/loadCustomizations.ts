@@ -49,6 +49,6 @@ export const loadCustomizations = async <K>(
     console.log('We had an error');
     // In case of an error, return an empty object instead of killing everything.
     console.error(error);
-    return { userData: undefined, customizations: undefined };
+    return { userData: {}, customizations: {} };
   }
 };
