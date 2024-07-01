@@ -20,7 +20,10 @@ export const loadCustomizations = async <K>(
   userData: K,
   baseUrl: string,
   request?: Request,
-) => {
+): Promise<{
+  userData: Record<string, unknown>;
+  customizations: Record<string, CustomizationResult>;
+}> => {
   try {
     let previewOverrideCookie;
     if (typeof window === 'object') {
@@ -37,12 +40,15 @@ export const loadCustomizations = async <K>(
       previewOverrideCookie ? `&previewOverrides=${previewOverrideCookie}` : ''
     }`;
     const res = await fetch(fullUrl);
-    const data: Record<string, CustomizationResult> = await res.json();
+    const data: {
+      userData: Record<string, unknown>;
+      customizations: Record<string, CustomizationResult>;
+    } = await res.json();
     return data;
   } catch (error) {
     console.log('We had an error');
     // In case of an error, return an empty object instead of killing everything.
     console.error(error);
-    return {};
+    return { userData: undefined, customizations: undefined };
   }
 };

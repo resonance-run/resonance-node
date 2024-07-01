@@ -100,6 +100,9 @@ describe('loadCustomizations', () => {
       'https://resonance.example.com',
       request,
     );
-    expect(customizations).toStrictEqual({});
+    expect(customizations).toStrictEqual({
+      customizations: undefined,
+      userData: undefined,
+    });
   });
 });
