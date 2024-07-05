@@ -26,13 +26,21 @@ export default class Resonance {
   loadCustomizations({
     type,
     userData,
+    surfaceId,
     request,
   }: {
     type: string;
     userData: unknown;
+    surfaceId?: string;
     request?: Request;
   }) {
-    return loadCustomizations(type, userData, this.baseUrl, request);
+    return loadCustomizations({
+      type,
+      userData,
+      surfaceId,
+      baseUrl: this.baseUrl,
+      request,
+    });
   }
 
   customizationToFieldsObject(customization: CustomizationResult) {

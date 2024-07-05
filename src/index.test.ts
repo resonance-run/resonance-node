@@ -61,13 +61,36 @@ describe('Resonance class', () => {
       userData,
       request,
     });
-    expect(loadCustomizations).toHaveBeenCalledOnce();
-    expect(loadCustomizations).toHaveBeenCalledWith(
+    expect(loadCustomizations).toHaveBeenCalled();
+    expect(loadCustomizations).toHaveBeenCalledWith({
       type,
       userData,
       baseUrl,
       request,
-    );
+    });
+  });
+
+  test('loadCustomizations with surfaceId', () => {
+    const baseUrl = 'https://www.example.com';
+    const type = 'resonance-copy';
+    const surfaceId = 'common:nav-1234';
+    const userData = { id: 'user-id-123' };
+    const request = new Request('https://www.example.com');
+
+    const instance = new Resonance(baseUrl);
+    instance.loadCustomizations({
+      type,
+      userData,
+      surfaceId,
+      request,
+    });
+    expect(loadCustomizations).toHaveBeenLastCalledWith({
+      type,
+      userData,
+      surfaceId,
+      baseUrl,
+      request,
+    });
   });
 
   test('customizationToFieldsObject', () => {

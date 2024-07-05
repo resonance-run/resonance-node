@@ -15,12 +15,19 @@ export type CustomizationResult = {
 
 const PREVIEW_COOKIE_NAME = 'resonance.preview';
 
-export const loadCustomizations = async <K>(
-  type: string,
-  userData: K,
-  baseUrl: string,
-  request?: Request,
-): Promise<{
+export const loadCustomizations = async <K>({
+  type,
+  userData,
+  baseUrl,
+  surfaceId,
+  request,
+}: {
+  type: string;
+  userData: K;
+  baseUrl: string;
+  surfaceId?: string;
+  request?: Request;
+}): Promise<{
   userData: Record<string, unknown>;
   customizations: Record<string, CustomizationResult>;
 }> => {
@@ -36,7 +43,7 @@ export const loadCustomizations = async <K>(
         : undefined;
     }
     const encodedUserData = encodeURIComponent(JSON.stringify(userData));
-    const fullUrl = `${baseUrl}/customizations?userData=${encodedUserData}&customizationType=${type}${
+    const fullUrl = `${baseUrl}/customizations?userData=${encodedUserData}&customizationType=${type}${surfaceId ? `&surfaceId=${surfaceId}` : ''}${
       previewOverrideCookie ? `&previewOverrides=${previewOverrideCookie}` : ''
     }`;
     const res = await fetch(fullUrl);
@@ -46,7 +53,9 @@ export const loadCustomizations = async <K>(
     } = await res.json();
     return data;
   } catch (error) {
-    console.log('We had an error');
+    console.log(
+      'An error occurred in the Resonance Node SDK while trying to load customizations:',
+    );
     // In case of an error, return an empty object instead of killing everything.
     console.error(error);
     return { userData: {}, customizations: {} };
