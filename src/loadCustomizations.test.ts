@@ -19,15 +19,25 @@ describe('loadCustomizations', () => {
 
   test('loadCustomizations makes call to client cache service', async () => {
     const request = new Request('https://resonance.example.com');
+    const userData = { id: 123 };
     await loadCustomizations({
       type: 'resonance-copy',
-      userData: { id: 123 },
+      userData,
       baseUrl: 'https://resonance.example.com',
       request,
     });
-    const expectedUrl = `https://resonance.example.com/customizations?userData=${encodeURIComponent(JSON.stringify({ id: 123 }))}&customizationType=resonance-copy`;
+    const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl);
+    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userData,
+        customizationType: 'resonance-copy',
+      }),
+    });
   });
 
   test('loadCustomizations makes call with preview data', async () => {
@@ -40,15 +50,26 @@ describe('loadCustomizations', () => {
     });
     const cookie = serialize('resonance.preview', overrideData);
     request.headers.set('Cookie', cookie);
+    const userData = { id: 123 };
     await loadCustomizations({
       type: 'resonance-copy',
-      userData: { id: 123 },
+      userData,
       baseUrl: 'https://resonance.example.com',
       request,
     });
-    const expectedUrl = `https://resonance.example.com/customizations?userData=${encodeURIComponent(JSON.stringify({ id: 123 }))}&customizationType=resonance-copy&previewOverrides=${encodeURIComponent(overrideData)}`;
+    const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl);
+    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userData,
+        customizationType: 'resonance-copy',
+        previewOverrides: cookie.replace('resonance.preview=', ''),
+      }),
+    });
   });
 
   test('loadCustomizations makes call with preview data (browser)', async () => {
@@ -62,14 +83,25 @@ describe('loadCustomizations', () => {
     Cookies.get.mockImplementation(() => {
       return encodeURIComponent(overrideData);
     });
+    const userData = { id: 123 };
     await loadCustomizations({
       type: 'resonance-copy',
-      userData: { id: 123 },
+      userData,
       baseUrl: 'https://resonance.example.com',
     });
-    const expectedUrl = `https://resonance.example.com/customizations?userData=${encodeURIComponent(JSON.stringify({ id: 123 }))}&customizationType=resonance-copy&previewOverrides=${encodeURIComponent(overrideData)}`;
+    const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl);
+    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userData,
+        customizationType: 'resonance-copy',
+        previewOverrides: encodeURIComponent(overrideData),
+      }),
+    });
   });
 
   test('it returns the result of the fetch', async () => {

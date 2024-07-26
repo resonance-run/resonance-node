@@ -20,12 +20,16 @@ export const loadCustomizations = async <K>({
   userData,
   baseUrl,
   surfaceId,
+  apiKey,
+  clientId,
   request,
 }: {
   type: string;
   userData: K;
   baseUrl: string;
   surfaceId?: string;
+  apiKey?: string;
+  clientId?: string;
   request?: Request;
 }): Promise<{
   userData: Record<string, unknown>;
@@ -42,11 +46,23 @@ export const loadCustomizations = async <K>({
         ? encodeURIComponent(previewOverrideCookie)
         : undefined;
     }
-    const encodedUserData = encodeURIComponent(JSON.stringify(userData));
-    const fullUrl = `${baseUrl}/customizations?userData=${encodedUserData}&customizationType=${type}${surfaceId ? `&surfaceId=${surfaceId}` : ''}${
-      previewOverrideCookie ? `&previewOverrides=${previewOverrideCookie}` : ''
-    }`;
-    const res = await fetch(fullUrl);
+    console.log('clientId', clientId);
+    const body = {
+      userData,
+      customizationType: type,
+      surfaceId,
+      previewOverrides: previewOverrideCookie,
+      apiKey,
+      clientId,
+    };
+    const fullUrl = `${baseUrl}/customizations`;
+    const res = await fetch(fullUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
     const data: {
       userData: Record<string, unknown>;
       customizations: Record<string, CustomizationResult>;

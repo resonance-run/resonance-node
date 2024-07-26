@@ -10,12 +10,27 @@ import {
 
 export default class Resonance {
   baseUrl: string;
+  apiKey: string;
+  clientId: string;
   gaTrackingId: string;
   gaAPISecret: string;
+
   private isBrowser = typeof window === 'object';
 
-  constructor(baseUrl: string) {
+  constructor(
+    baseUrl: string,
+    apiCredentials?: { clientId: string; apiKey: string },
+  ) {
     this.baseUrl = baseUrl;
+    if (apiCredentials) {
+      if (this.isBrowser) {
+        throw new Error(
+          'Resonance API credentials cannot be used in a browser environment',
+        );
+      }
+      this.apiKey = apiCredentials.apiKey;
+      this.clientId = apiCredentials.clientId;
+    }
   }
 
   initGA(trackingId: string, APISecret: string) {
@@ -40,6 +55,8 @@ export default class Resonance {
       surfaceId,
       baseUrl: this.baseUrl,
       request,
+      apiKey: this.apiKey,
+      clientId: this.clientId,
     });
   }
 

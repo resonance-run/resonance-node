@@ -31,6 +31,15 @@ describe('Resonance class', () => {
       expect(instance.baseUrl).toBe('https://www.example.com');
     });
 
+    test('adds API credentials', () => {
+      const instance = new Resonance('https://www.example.com', {
+        clientId: 'cfed1234',
+        apiKey: '1234-example',
+      });
+      expect(instance.clientId).toBe('cfed1234');
+      expect(instance.apiKey).toBe('1234-example');
+    });
+
     test('all public methods are present', () => {
       const instance = new Resonance('https://www.example.com');
       expect(instance.initGA).toBeTypeOf('function');
@@ -151,12 +160,21 @@ describe('Resonance class', () => {
       });
     });
 
-    describe('Broswer environment', () => {
+    describe('Browser environment', () => {
       beforeEach(() => {
         vi.stubGlobal('window', {});
       });
       afterEach(() => {
         vi.unstubAllGlobals();
+      });
+
+      test('Throws an error when calling constructor with API credentials in the browser', () => {
+        expect(() => {
+          new Resonance('https://www.example.com', {
+            clientId: 'cfed1234',
+            apiKey: '1234-example',
+          });
+        }).toThrow();
       });
 
       test('Does not call when gtag is not supplied', () => {
