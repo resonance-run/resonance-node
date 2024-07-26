@@ -46,7 +46,6 @@ export const loadCustomizations = async <K>({
         ? encodeURIComponent(previewOverrideCookie)
         : undefined;
     }
-    console.log('clientId', clientId);
     const body = {
       userData,
       customizationType: type,
