@@ -1,4 +1,5 @@
 import type { CustomizationResult } from '../loadCustomizations.js';
+
 import {
   triggerGABrowserImpressionEvent,
   triggerGAImpressionEvent,

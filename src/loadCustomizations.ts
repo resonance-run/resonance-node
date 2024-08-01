@@ -1,7 +1,7 @@
-import Cookies from 'js-cookie';
 import { parse } from 'cookie';
+import Cookies from 'js-cookie';
 
-export type CustomizationResult = {
+export interface CustomizationResult {
   id: string;
   locale?: string;
   customizationTypeId: string;
@@ -11,7 +11,7 @@ export type CustomizationResult = {
     rampPercent: number;
     fields: Record<string, { value: string }>;
   };
-};
+}
 
 const PREVIEW_COOKIE_NAME = 'resonance.preview';
 

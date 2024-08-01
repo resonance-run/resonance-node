@@ -3,9 +3,10 @@ import {
   triggerGABrowserImpressionEvent,
   triggerGAImpressionEvent,
 } from './google-analytics/__mocks__/index.js';
-import Resonance from './index.js';
 import { CustomizationResult } from './loadCustomizations.js';
 import { customizationToFieldsObject } from './util/__mocks__/index.js';
+
+import Resonance from './index.js';
 
 vi.mock('./loadCustomizations');
 vi.mock('./util/index');

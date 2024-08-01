@@ -1,12 +1,12 @@
 import {
+  triggerGABrowserImpressionEvent,
+  triggerGAImpressionEvent,
+} from './google-analytics/index.js';
+import {
   loadCustomizations,
   CustomizationResult,
 } from './loadCustomizations.js';
 import { customizationToFieldsObject } from './util/index.js';
-import {
-  triggerGABrowserImpressionEvent,
-  triggerGAImpressionEvent,
-} from './google-analytics/index.js';
 
 export default class Resonance {
   baseUrl: string;
@@ -73,7 +73,7 @@ export default class Resonance {
     customization: CustomizationResult;
     userId: string | number;
     gaClientId?: string;
-    gtag?: (...args: any[]) => void;
+    gtag?: (...args: unknown[]) => void;
   }) {
     if (this.isBrowser) {
       if (gtag && typeof gtag === 'function') {

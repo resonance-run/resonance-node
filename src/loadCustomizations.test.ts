@@ -1,5 +1,6 @@
-import Cookies from '../__mocks__/js-cookie.js';
 import { serialize } from 'cookie';
+
+import Cookies from '../__mocks__/js-cookie.js';
 
 import { loadCustomizations } from './loadCustomizations.js';
 
