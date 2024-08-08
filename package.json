@@ -41,7 +41,7 @@
     "eslint-plugin-testing-library": "^6.2.2",
     "happy-dom": "^14.12.3",
     "prettier": "^3.3.2",
-    "vite-tsconfig-paths": "^4.3.2",
+    "vite-tsconfig-paths": "^5.0.0",
     "vitest": "^2.0.5",
     "vitest-tsconfig-paths": "^3.4.1"
   },
