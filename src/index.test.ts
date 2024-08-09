@@ -1,4 +1,7 @@
-import { loadCustomizations } from './__mocks__/loadCustomizations.js';
+import {
+  loadCustomization,
+  loadCustomizations,
+} from './__mocks__/loadCustomizations.js';
 import {
   triggerGABrowserImpressionEvent,
   triggerGAImpressionEvent,
@@ -75,8 +78,12 @@ describe('Resonance class', () => {
     expect(loadCustomizations).toHaveBeenCalledWith({
       type,
       userData,
-      baseUrl,
+      surfaceId: undefined,
+      baseUrl: instance.baseUrl,
       request,
+      apiKey: instance.apiKey,
+      clientId: instance.clientId,
+      defaultValue: undefined,
     });
   });
 
@@ -100,6 +107,95 @@ describe('Resonance class', () => {
       surfaceId,
       baseUrl,
       request,
+      apiKey: instance.apiKey,
+      clientId: instance.clientId,
+      defaultValue: undefined,
+    });
+  });
+
+  describe('loadCustomization', () => {
+    test('loadCustomization without defaultValue', () => {
+      const baseUrl = 'https://www.example.com';
+      const type = 'resonance-copy';
+      const surfaceId = 'common:nav-1234';
+      const userData = { id: 'user-id-123' };
+      const request = new Request('https://www.example.com');
+
+      const instance = new Resonance(baseUrl);
+      instance.loadCustomization({
+        type,
+        userData,
+        surfaceId,
+        request,
+      });
+      expect(loadCustomization).toHaveBeenLastCalledWith({
+        type,
+        userData,
+        surfaceId,
+        baseUrl,
+        request,
+        apiKey: instance.apiKey,
+        clientId: instance.clientId,
+        defaultValue: undefined,
+      });
+    });
+
+    test('loadCustomization with defaultValue', () => {
+      const baseUrl = 'https://www.example.com';
+      const type = 'resonance-copy';
+      const surfaceId = 'common:nav-1234';
+      const userData = { id: 'user-id-123' };
+      const request = new Request('https://www.example.com');
+      const defaultValue = {
+        abc: 'def',
+      };
+
+      const instance = new Resonance(baseUrl);
+      instance.loadCustomization({
+        type,
+        userData,
+        surfaceId,
+        request,
+        defaultValue,
+      });
+      expect(loadCustomization).toHaveBeenLastCalledWith({
+        type,
+        userData,
+        surfaceId,
+        baseUrl,
+        request,
+        apiKey: instance.apiKey,
+        clientId: instance.clientId,
+        defaultValue,
+      });
+    });
+
+    test('loadCustomization return value', async () => {
+      const baseUrl = 'https://www.example.com';
+      const type = 'resonance-copy';
+      const surfaceId = 'common:nav-1234';
+      const userData = { id: 'user-id-123' };
+      const request = new Request('https://www.example.com');
+      const defaultValue = {
+        abc: 'def',
+      };
+
+      loadCustomization.mockResolvedValue({
+        customization: { abc: 'hello' },
+        userData,
+      });
+
+      const instance = new Resonance(baseUrl);
+      const result = await instance.loadCustomization({
+        type,
+        userData,
+        surfaceId,
+        request,
+        defaultValue,
+      });
+      expect(result).toStrictEqual({
+        abc: 'hello',
+      });
     });
   });
 

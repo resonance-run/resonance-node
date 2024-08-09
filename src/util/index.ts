@@ -10,6 +10,6 @@ export const customizationToFieldsObject = (
       }
       return res;
     },
-    {},
+    Object.create(null),
   );
 };
