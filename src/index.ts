@@ -5,6 +5,7 @@ import {
 import {
   loadCustomizations,
   CustomizationResult,
+  loadCustomization,
 } from './loadCustomizations.js';
 import { customizationToFieldsObject } from './util/index.js';
 
@@ -38,16 +39,34 @@ export default class Resonance {
     this.gaAPISecret = APISecret;
   }
 
+  async loadCustomization(args: {
+    type: string;
+    userData: unknown;
+    surfaceId: string;
+    request?: Request;
+    defaultValue?: unknown;
+  }) {
+    const { customization } = await loadCustomization({
+      ...args,
+      baseUrl: this.baseUrl,
+      apiKey: this.apiKey,
+      clientId: this.clientId,
+    });
+    return customization;
+  }
+
   loadCustomizations({
     type,
     userData,
     surfaceId,
     request,
+    defaultValue,
   }: {
     type: string;
     userData: unknown;
     surfaceId?: string;
     request?: Request;
+    defaultValue?: unknown;
   }) {
     return loadCustomizations({
       type,
@@ -57,6 +76,7 @@ export default class Resonance {
       request,
       apiKey: this.apiKey,
       clientId: this.clientId,
+      defaultValue,
     });
   }
 
