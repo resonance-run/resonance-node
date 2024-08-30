@@ -12,7 +12,10 @@ export interface CustomizationResult {
   variation: {
     id: string;
     rampPercent: number;
-    fields: Record<string, { value: string }>;
+    fields: Record<
+      string,
+      { value?: string; fields?: Record<string, { value: string }[]> }
+    >;
   };
 }
 
