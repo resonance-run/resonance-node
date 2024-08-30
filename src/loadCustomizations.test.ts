@@ -23,7 +23,6 @@ describe('loadCustomizations', () => {
                     value: 'https://example.com/image.jpg',
                   },
                   ctaValue: { value: '' },
-                  count: { value: 0 },
                   bullets: { value: [''] },
                 },
               },
@@ -144,7 +143,6 @@ describe('loadCustomizations', () => {
                 value: 'https://example.com/image.jpg',
               },
               ctaValue: { value: '' },
-              count: { value: 0 },
               bullets: { value: [''] },
             },
           },
@@ -227,7 +225,6 @@ describe('loadCustomizations', () => {
           stringValue: 'This is a string',
           imageValue: 'https://example.com/image.jpg',
           ctaValue: 'Click me',
-          count: 0,
           bullets: ['One', 'Two', 'Four'],
         },
       },
@@ -256,7 +253,6 @@ describe('loadCustomizations', () => {
                 value: 'https://example.com/image.jpg',
               },
               ctaValue: { value: '' },
-              count: { value: 0 },
               bullets: { value: [''] },
             },
           },
@@ -284,7 +280,6 @@ describe('loadCustomizations', () => {
                 value: 'https://example.com/image.jpg',
               },
               ctaValue: { value: '' },
-              count: { value: 0 },
               bullets: { value: [''] },
             },
           },
@@ -313,7 +308,6 @@ describe('loadCustomization', () => {
                     value: 'https://example.com/image.jpg',
                   },
                   ctaValue: { value: '' },
-                  count: { value: 0 },
                   bullets: { value: [''] },
                 },
               },
@@ -430,7 +424,6 @@ describe('loadCustomization', () => {
     });
     expect(customizations).toStrictEqual({
       customization: {
-        count: 0,
         stringValue: 'This is a string',
         imageValue: 'https://example.com/image.jpg',
       },
@@ -456,7 +449,6 @@ describe('loadCustomization', () => {
     expect(customization).toStrictEqual({
       customization: {
         stringValue: 'This is a string',
-        count: 0,
         imageValue: 'https://example.com/image.jpg',
         ctaValue: 'Click me',
         bullets: ['One', 'Two', 'Four'],
