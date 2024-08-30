@@ -9,7 +9,17 @@ export const customizationToFieldsObject = (
         res[key] = value;
       }
       if (fields) {
-        res[key] = fields;
+        res[key] = fields.map((innerField) => {
+          return Object.entries(innerField).reduce(
+            (innerRes, [nestedName, nestedField]) => {
+              if (nestedField.value && nestedField.value !== '') {
+                innerRes[nestedName] = nestedField.value;
+              }
+              return innerRes;
+            },
+            {},
+          );
+        }, {});
       }
       return res;
     },

@@ -14,7 +14,7 @@ export interface CustomizationResult {
     rampPercent: number;
     fields: Record<
       string,
-      { value?: string; fields?: Record<string, { value: string }[]> }
+      { value?: string; fields?: Record<string, { value: string }>[] }
     >;
   };
 }
