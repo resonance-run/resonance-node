@@ -54,7 +54,7 @@ export const loadCustomization = async <K>(args: LoadCustomizationArgs<K>) => {
           // This includes falsy values and arrays that contain only falsy values
           filter({ srcVal }) {
             return Array.isArray(srcVal)
-              ? srcVal.length > 0 && srcVal.every((v) => Boolean(v))
+              ? srcVal.length > 0 && srcVal.every((v) => Boolean(v) || v === 0)
               : Boolean(srcVal) || srcVal === 0;
           },
         })(

@@ -5,7 +5,7 @@ export const customizationToFieldsObject = (
 ) => {
   return Object.entries(customization?.variation?.fields || {}).reduce(
     (res, [key, { value, fields }]) => {
-      if (value && value !== '') {
+      if (value !== undefined && value !== '') {
         res[key] = value;
       }
       if (fields) {
