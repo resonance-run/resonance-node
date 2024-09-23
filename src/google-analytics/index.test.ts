@@ -47,17 +47,30 @@ describe('Google Analytics events', () => {
       const expectedUrl = `https://www.google-analytics.com/mp/collect?measurement_id=${gaTrackingId}&api_secret=${gaAPISecret}`;
       expect(fetch).toHaveBeenCalled();
       // @ts-expect-error TS doesn't know that fetch is mocked
-      expect(fetch.mock.lastCall[0]).toBe(expectedUrl);
+      expect(fetch.mock.calls[0][0]).toBe(expectedUrl);
       // @ts-expect-error TS doesn't know that fetch is mocked
-      const fetchBody = JSON.parse(fetch.mock.lastCall[1].body);
+      const fetchBody = JSON.parse(fetch.mock.calls[0][1].body);
       expect(fetchBody.client_id).toBe(gaClientId);
       expect(fetchBody.events).toStrictEqual([
         {
           name: 'resonance_impression',
           params: {
+            exp_variant_string: `RESAMP-${customization.id}-${customization.variation.id}`,
             customization_id: customization.id,
             variation_id: customization.variation.id,
             user_id: userId,
+          },
+        },
+      ]);
+      // @ts-expect-error TS doesn't know that fetch is mocked
+      expect(fetch.mock.calls[1][0]).toBe(expectedUrl);
+      // @ts-expect-error TS doesn't know that fetch is mocked
+      const experienceImpressionBody = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(experienceImpressionBody.events).toStrictEqual([
+        {
+          name: 'experience_impression',
+          params: {
+            exp_variant_string: `RESAMP-${customization.id}-${customization.variation.id}`,
           },
         },
       ]);
