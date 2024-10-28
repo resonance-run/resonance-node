@@ -40,7 +40,7 @@ describe('loadCustomizations', () => {
     const request = new Request('https://resonance.example.com');
     const userData = { id: 123 };
     await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData,
       baseUrl: 'https://resonance.example.com',
       request,
@@ -71,7 +71,7 @@ describe('loadCustomizations', () => {
     request.headers.set('Cookie', cookie);
     const userData = { id: 123 };
     await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData,
       baseUrl: 'https://resonance.example.com',
       request,
@@ -104,7 +104,7 @@ describe('loadCustomizations', () => {
     });
     const userData = { id: 123 };
     await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData,
       baseUrl: 'https://resonance.example.com',
     });
@@ -126,7 +126,7 @@ describe('loadCustomizations', () => {
   test('it returns the result of the fetch', async () => {
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
       request,
@@ -164,7 +164,7 @@ describe('loadCustomizations', () => {
 
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
       request,
@@ -187,7 +187,7 @@ describe('loadCustomizations', () => {
 
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
       defaultValue: {
@@ -206,7 +206,7 @@ describe('loadCustomizations', () => {
   test('it returns the defaultValue merged with the customization values', async () => {
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
       request,
@@ -235,7 +235,7 @@ describe('loadCustomizations', () => {
   test('it returns the customization values and ignores the default if the default is not an object', async () => {
     const request = new Request('https://resonance.example.com');
     let customizations = await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
       request,
@@ -262,7 +262,7 @@ describe('loadCustomizations', () => {
     });
 
     customizations = await loadCustomizations({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
       request,
@@ -325,7 +325,7 @@ describe('loadCustomization', () => {
     const request = new Request('https://resonance.example.com');
     const userData = { id: 123 };
     await loadCustomization({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       userData,
       baseUrl: 'https://resonance.example.com',
       surfaceId: 'surfaceOne',
@@ -358,7 +358,7 @@ describe('loadCustomization', () => {
     request.headers.set('Cookie', cookie);
     const userData = { id: 123 };
     await loadCustomization({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData,
       baseUrl: 'https://resonance.example.com',
@@ -393,7 +393,7 @@ describe('loadCustomization', () => {
     });
     const userData = { id: 123 };
     await loadCustomization({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData,
       baseUrl: 'https://resonance.example.com',
@@ -416,7 +416,7 @@ describe('loadCustomization', () => {
   test('Returns a single customization', async () => {
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomization({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
@@ -434,7 +434,7 @@ describe('loadCustomization', () => {
   test('it returns the defaultValue merged with the customization values', async () => {
     const request = new Request('https://resonance.example.com');
     const customization = await loadCustomization({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
@@ -469,7 +469,7 @@ describe('loadCustomization', () => {
 
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomization({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
@@ -493,7 +493,7 @@ describe('loadCustomization', () => {
 
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomization({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
@@ -533,7 +533,7 @@ describe('loadCustomization', () => {
 
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomization({
-      type: 'resonance-copy',
+      customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',

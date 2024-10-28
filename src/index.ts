@@ -11,10 +11,10 @@ import { customizationToFieldsObject } from './util/index.js';
 
 export default class Resonance {
   baseUrl: string;
-  apiKey: string;
-  clientId: string;
-  gaTrackingId: string;
-  gaAPISecret: string;
+  private apiKey: string;
+  private clientId: string;
+  private gaTrackingId: string;
+  private gaAPISecret: string;
 
   private isBrowser = typeof window === 'object';
 
@@ -40,7 +40,7 @@ export default class Resonance {
   }
 
   async loadCustomization(args: {
-    type: string;
+    customizationType: string;
     userData: unknown;
     surfaceId: string;
     request?: Request;
@@ -55,21 +55,21 @@ export default class Resonance {
     return customization;
   }
 
-  loadCustomizations({
-    type,
+  loadCustomizations<K>({
+    customizationType,
     userData,
     surfaceId,
     request,
     defaultValue,
   }: {
-    type: string;
+    customizationType: string;
     userData: unknown;
     surfaceId?: string;
     request?: Request;
-    defaultValue?: unknown;
+    defaultValue?: K;
   }) {
     return loadCustomizations({
-      type,
+      customizationType,
       userData,
       surfaceId,
       baseUrl: this.baseUrl,

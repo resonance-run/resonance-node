@@ -35,15 +35,6 @@ describe('Resonance class', () => {
       expect(instance.baseUrl).toBe('https://www.example.com');
     });
 
-    test('adds API credentials', () => {
-      const instance = new Resonance('https://www.example.com', {
-        clientId: 'cfed1234',
-        apiKey: '1234-example',
-      });
-      expect(instance.clientId).toBe('cfed1234');
-      expect(instance.apiKey).toBe('1234-example');
-    });
-
     test('all public methods are present', () => {
       const instance = new Resonance('https://www.example.com');
       expect(instance.initGA).toBeTypeOf('function');
@@ -53,62 +44,53 @@ describe('Resonance class', () => {
     });
   });
 
-  test('initGA', () => {
-    const id = '12345';
-    const secret = 'NoOneCanKnowThis';
-    const instance = new Resonance('https://www.example.com');
-    instance.initGA(id, secret);
-    expect(instance.gaTrackingId).toBe(id);
-    expect(instance.gaAPISecret).toBe(secret);
-  });
-
   test('loadCustomizations', () => {
     const baseUrl = 'https://www.example.com';
-    const type = 'resonance-copy';
+    const customizationType = 'resonance-copy';
     const userData = { id: 'user-id-123' };
     const request = new Request('https://www.example.com');
 
     const instance = new Resonance(baseUrl);
     instance.loadCustomizations({
-      type,
+      customizationType,
       userData,
       request,
     });
     expect(loadCustomizations).toHaveBeenCalled();
     expect(loadCustomizations).toHaveBeenCalledWith({
-      type,
+      customizationType,
       userData,
       surfaceId: undefined,
       baseUrl: instance.baseUrl,
       request,
-      apiKey: instance.apiKey,
-      clientId: instance.clientId,
+      apiKey: undefined,
+      clientId: undefined,
       defaultValue: undefined,
     });
   });
 
   test('loadCustomizations with surfaceId', () => {
     const baseUrl = 'https://www.example.com';
-    const type = 'resonance-copy';
+    const customizationType = 'resonance-copy';
     const surfaceId = 'common:nav-1234';
     const userData = { id: 'user-id-123' };
     const request = new Request('https://www.example.com');
 
     const instance = new Resonance(baseUrl);
     instance.loadCustomizations({
-      type,
+      customizationType,
       userData,
       surfaceId,
       request,
     });
     expect(loadCustomizations).toHaveBeenLastCalledWith({
-      type,
+      customizationType,
       userData,
       surfaceId,
       baseUrl,
       request,
-      apiKey: instance.apiKey,
-      clientId: instance.clientId,
+      apiKey: undefined,
+      clientId: undefined,
       defaultValue: undefined,
     });
   });
@@ -116,33 +98,33 @@ describe('Resonance class', () => {
   describe('loadCustomization', () => {
     test('loadCustomization without defaultValue', () => {
       const baseUrl = 'https://www.example.com';
-      const type = 'resonance-copy';
+      const customizationType = 'resonance-copy';
       const surfaceId = 'common:nav-1234';
       const userData = { id: 'user-id-123' };
       const request = new Request('https://www.example.com');
 
       const instance = new Resonance(baseUrl);
       instance.loadCustomization({
-        type,
+        customizationType,
         userData,
         surfaceId,
         request,
       });
       expect(loadCustomization).toHaveBeenLastCalledWith({
-        type,
+        customizationType,
         userData,
         surfaceId,
         baseUrl,
         request,
-        apiKey: instance.apiKey,
-        clientId: instance.clientId,
+        apiKey: undefined,
+        clientId: undefined,
         defaultValue: undefined,
       });
     });
 
     test('loadCustomization with defaultValue', () => {
       const baseUrl = 'https://www.example.com';
-      const type = 'resonance-copy';
+      const customizationType = 'resonance-copy';
       const surfaceId = 'common:nav-1234';
       const userData = { id: 'user-id-123' };
       const request = new Request('https://www.example.com');
@@ -152,20 +134,20 @@ describe('Resonance class', () => {
 
       const instance = new Resonance(baseUrl);
       instance.loadCustomization({
-        type,
+        customizationType,
         userData,
         surfaceId,
         request,
         defaultValue,
       });
       expect(loadCustomization).toHaveBeenLastCalledWith({
-        type,
+        customizationType,
         userData,
         surfaceId,
         baseUrl,
         request,
-        apiKey: instance.apiKey,
-        clientId: instance.clientId,
+        apiKey: undefined,
+        clientId: undefined,
         defaultValue,
       });
     });
@@ -187,7 +169,7 @@ describe('Resonance class', () => {
 
       const instance = new Resonance(baseUrl);
       const result = await instance.loadCustomization({
-        type,
+        customizationType: type,
         userData,
         surfaceId,
         request,
