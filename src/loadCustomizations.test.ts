@@ -203,7 +203,7 @@ describe('loadCustomizations', () => {
     });
   });
 
-  test('it returns the defaultValue merged with the customization values', async () => {
+  test('it returns the  customization values, no merging of the default value', async () => {
     const request = new Request('https://resonance.example.com');
     const customizations = await loadCustomizations({
       customizationType: 'resonance-copy',
@@ -219,13 +219,12 @@ describe('loadCustomizations', () => {
         },
       },
     });
-    expect(customizations).toStrictEqual({
+    expect(customizations).toEqual({
       customizations: {
         surfaceOne: {
           stringValue: 'This is a string',
           imageValue: 'https://example.com/image.jpg',
-          ctaValue: 'Click me',
-          bullets: ['One', 'Two', 'Four'],
+          bullets: [''],
         },
       },
       userData: {},
@@ -415,15 +414,16 @@ describe('loadCustomization', () => {
   });
   test('Returns a single customization', async () => {
     const request = new Request('https://resonance.example.com');
-    const customizations = await loadCustomization({
+    const customization = await loadCustomization({
       customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
       request,
     });
-    expect(customizations).toStrictEqual({
+    expect(customization).toEqual({
       customization: {
+        bullets: [''],
         stringValue: 'This is a string',
         imageValue: 'https://example.com/image.jpg',
       },
@@ -431,7 +431,7 @@ describe('loadCustomization', () => {
     });
   });
 
-  test('it returns the defaultValue merged with the customization values', async () => {
+  test('it does not merge default values with the customization values', async () => {
     const request = new Request('https://resonance.example.com');
     const customization = await loadCustomization({
       customizationType: 'resonance-copy',
@@ -446,12 +446,11 @@ describe('loadCustomization', () => {
         bullets: ['One', 'Two', 'Four'],
       },
     });
-    expect(customization).toStrictEqual({
+    expect(customization).toEqual({
       customization: {
         stringValue: 'This is a string',
         imageValue: 'https://example.com/image.jpg',
-        ctaValue: 'Click me',
-        bullets: ['One', 'Two', 'Four'],
+        bullets: [''],
       },
       userData: {},
     });
