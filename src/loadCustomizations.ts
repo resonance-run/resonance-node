@@ -22,7 +22,7 @@ export interface CustomizationResult {
 const PREVIEW_COOKIE_NAME = 'resonance.preview';
 
 interface LoadCustomizationsArgs<K> {
-  type: string;
+  customizationType: string;
   userData: K;
   baseUrl: string;
   surfaceId?: string;
@@ -33,7 +33,7 @@ interface LoadCustomizationsArgs<K> {
 }
 
 interface LoadCustomizationArgs<K> {
-  type: string;
+  customizationType: string;
   userData: K;
   baseUrl: string;
   surfaceId: string;
@@ -126,7 +126,7 @@ const fetchCustomizations = async <K>({
   request,
   userData,
   surfaceId,
-  type,
+  customizationType,
   apiKey,
   clientId,
   baseUrl,
@@ -143,7 +143,7 @@ const fetchCustomizations = async <K>({
   }
   const body = {
     userData,
-    customizationType: type,
+    customizationType,
     surfaceId,
     previewOverrides: previewOverrideCookie,
     apiKey,
