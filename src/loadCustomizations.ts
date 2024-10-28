@@ -1,6 +1,5 @@
 import { parse } from 'cookie';
 import Cookies from 'js-cookie';
-import { mergician } from 'mergician';
 
 import { customizationToFieldsObject } from './util/index.js';
 
@@ -49,18 +48,7 @@ export const loadCustomization = async <K>(args: LoadCustomizationArgs<K>) => {
     const data = await fetchCustomizations(args);
 
     const customization = data.customizations[args.surfaceId]
-      ? mergician({
-          // This custom filter says to ignore custom values that are essentially empty.
-          // This includes falsy values and arrays that contain only falsy values
-          filter({ srcVal }) {
-            return Array.isArray(srcVal)
-              ? srcVal.length > 0 && srcVal.every((v) => Boolean(v) || v === 0)
-              : Boolean(srcVal) || srcVal === 0;
-          },
-        })(
-          defaultValue,
-          customizationToFieldsObject(data.customizations[args.surfaceId]),
-        )
+      ? customizationToFieldsObject(data.customizations[args.surfaceId])
       : defaultValue;
     return { customization, userData: data.userData };
   } catch (error) {
@@ -90,23 +78,12 @@ export const loadCustomizations = async <K>(
       return {
         userData: data.userData,
         // mergician does a deep merge on the objects
-        customizations: mergician({
-          // This custom filter says to ignore custom values that are essentially empty.
-          // This includes falsy values and arrays that contain only falsy values
-          filter({ srcVal }) {
-            return Array.isArray(srcVal)
-              ? srcVal.length > 0 && srcVal.every((v) => Boolean(v))
-              : Boolean(srcVal) || srcVal === 0;
+        customizations: Object.entries(data.customizations).reduce(
+          (res, [surfaceId, customization]) => {
+            res[surfaceId] = customizationToFieldsObject(customization);
+            return res;
           },
-        })(
-          defaultValue,
-          Object.entries(data.customizations).reduce(
-            (res, [surfaceId, customization]) => {
-              res[surfaceId] = customizationToFieldsObject(customization);
-              return res;
-            },
-            Object.create(null),
-          ),
+          Object.create(null),
         ),
       };
     }
