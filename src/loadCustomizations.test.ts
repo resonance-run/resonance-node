@@ -47,16 +47,21 @@ describe('loadCustomizations', () => {
     });
     const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+
+    // @ts-expect-error fetch is actually a mock function
+    const mockCall = fetch.mock.calls[0];
+    expect(mockCall[0]).toEqual(expectedUrl);
+    expect(mockCall[1].headers).toEqual({
+      'Content-Type': 'application/json',
+    });
+    expect(mockCall[1].body).toEqual(
+      JSON.stringify({
         userData,
         customizationType: 'resonance-copy',
       }),
-    });
+    );
+    const mockSignal = mockCall[1].signal;
+    expect(mockSignal).toBeInstanceOf(AbortSignal);
   });
 
   test('loadCustomizations makes call with preview data', async () => {
@@ -78,17 +83,22 @@ describe('loadCustomizations', () => {
     });
     const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+
+    // @ts-expect-error fetch is actually a mock function
+    const mockCall = fetch.mock.calls[0];
+    expect(mockCall[0]).toEqual(expectedUrl);
+    expect(mockCall[1].headers).toEqual({
+      'Content-Type': 'application/json',
+    });
+    expect(mockCall[1].body).toEqual(
+      JSON.stringify({
         userData,
         customizationType: 'resonance-copy',
         previewOverrides: cookie.replace('resonance.preview=', ''),
       }),
-    });
+    );
+    const mockSignal = mockCall[1].signal;
+    expect(mockSignal).toBeInstanceOf(AbortSignal);
   });
 
   test('loadCustomizations makes call with preview data (browser)', async () => {
@@ -110,17 +120,22 @@ describe('loadCustomizations', () => {
     });
     const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+
+    // @ts-expect-error fetch is actually a mock function
+    const mockCall = fetch.mock.calls[0];
+    expect(mockCall[0]).toEqual(expectedUrl);
+    expect(mockCall[1].headers).toEqual({
+      'Content-Type': 'application/json',
+    });
+    expect(mockCall[1].body).toEqual(
+      JSON.stringify({
         userData,
         customizationType: 'resonance-copy',
         previewOverrides: encodeURIComponent(overrideData),
       }),
-    });
+    );
+    const mockSignal = mockCall[1].signal;
+    expect(mockSignal).toBeInstanceOf(AbortSignal);
   });
 
   test('it returns the result of the fetch', async () => {
@@ -332,17 +347,22 @@ describe('loadCustomization', () => {
     });
     const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+
+    // @ts-expect-error fetch is actually a mock function
+    const mockCall = fetch.mock.calls[0];
+    expect(mockCall[0]).toEqual(expectedUrl);
+    expect(mockCall[1].headers).toEqual({
+      'Content-Type': 'application/json',
+    });
+    expect(mockCall[1].body).toEqual(
+      JSON.stringify({
         userData,
         customizationType: 'resonance-copy',
         surfaceId: 'surfaceOne',
       }),
-    });
+    );
+    const mockSignal = mockCall[1].signal;
+    expect(mockSignal).toBeInstanceOf(AbortSignal);
   });
 
   test('loadCustomization makes call with preview data', async () => {
@@ -365,18 +385,23 @@ describe('loadCustomization', () => {
     });
     const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+
+    // @ts-expect-error fetch is actually a mock function
+    const mockCall = fetch.mock.calls[0];
+    expect(mockCall[0]).toEqual(expectedUrl);
+    expect(mockCall[1].headers).toEqual({
+      'Content-Type': 'application/json',
+    });
+    expect(mockCall[1].body).toEqual(
+      JSON.stringify({
         userData,
         customizationType: 'resonance-copy',
         surfaceId: 'surfaceOne',
         previewOverrides: cookie.replace('resonance.preview=', ''),
       }),
-    });
+    );
+    const mockSignal = mockCall[1].signal;
+    expect(mockSignal).toBeInstanceOf(AbortSignal);
   });
 
   test('loadCustomization makes call with preview data (browser)', async () => {
@@ -399,19 +424,25 @@ describe('loadCustomization', () => {
     });
     const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+
+    // @ts-expect-error fetch is actually a mock function
+    const mockCall = fetch.mock.calls[0];
+    expect(mockCall[0]).toEqual(expectedUrl);
+    expect(mockCall[1].headers).toEqual({
+      'Content-Type': 'application/json',
+    });
+    expect(mockCall[1].body).toEqual(
+      JSON.stringify({
         userData,
         customizationType: 'resonance-copy',
         surfaceId: 'surfaceOne',
         previewOverrides: encodeURIComponent(overrideData),
       }),
-    });
+    );
+    const mockSignal = mockCall[1].signal;
+    expect(mockSignal).toBeInstanceOf(AbortSignal);
   });
+
   test('Returns a single customization', async () => {
     const request = new Request('https://resonance.example.com');
     const customization = await loadCustomization({

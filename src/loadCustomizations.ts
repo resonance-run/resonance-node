@@ -128,6 +128,7 @@ const fetchCustomizations = async <K>({
   };
   const fullUrl = `${baseUrl}/customizations`;
   const res = await fetch(fullUrl, {
+    signal: AbortSignal.timeout(500),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

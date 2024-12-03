@@ -16,43 +16,47 @@ export const triggerGAImpressionEvent = async ({
   gaClientId: string;
 }) => {
   try {
-    await fetch(
-      `https://www.google-analytics.com/mp/collect?measurement_id=${gaTrackingId}&api_secret=${gaAPISecret}`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          client_id: gaClientId,
-          events: [
-            {
-              name: IMPRESSION_EVENT_NAME,
-              params: {
-                exp_variant_string: `RESAMP-${customization.id}-${customization.variation.id}`,
-                customization_id: customization.id,
-                variation_id: customization.variation.id,
-                user_id: userId,
+    await Promise.all([
+      fetch(
+        `https://www.google-analytics.com/mp/collect?measurement_id=${gaTrackingId}&api_secret=${gaAPISecret}`,
+        {
+          signal: AbortSignal.timeout(1000),
+          method: 'POST',
+          body: JSON.stringify({
+            client_id: gaClientId,
+            events: [
+              {
+                name: IMPRESSION_EVENT_NAME,
+                params: {
+                  exp_variant_string: `RESAMP-${customization.id}-${customization.variation.id}`,
+                  customization_id: customization.id,
+                  variation_id: customization.variation.id,
+                  user_id: userId,
+                },
               },
-            },
-          ],
-        }),
-      },
-    );
-    await fetch(
-      `https://www.google-analytics.com/mp/collect?measurement_id=${gaTrackingId}&api_secret=${gaAPISecret}`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          client_id: gaClientId,
-          events: [
-            {
-              name: EXPERIENCE_IMPRESSION,
-              params: {
-                exp_variant_string: `RESAMP-${customization.id}-${customization.variation.id}`,
+            ],
+          }),
+        },
+      ),
+      fetch(
+        `https://www.google-analytics.com/mp/collect?measurement_id=${gaTrackingId}&api_secret=${gaAPISecret}`,
+        {
+          signal: AbortSignal.timeout(1000),
+          method: 'POST',
+          body: JSON.stringify({
+            client_id: gaClientId,
+            events: [
+              {
+                name: EXPERIENCE_IMPRESSION,
+                params: {
+                  exp_variant_string: `RESAMP-${customization.id}-${customization.variation.id}`,
+                },
               },
-            },
-          ],
-        }),
-      },
-    );
+            ],
+          }),
+        },
+      ),
+    ]);
     return 'success';
   } catch (error) {
     console.error('Error emitting GA Tracking event', error);
