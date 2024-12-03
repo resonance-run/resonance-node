@@ -39,14 +39,14 @@ export default class Resonance {
     this.gaAPISecret = APISecret;
   }
 
-  async loadCustomization(args: {
+  async loadCustomization<K>(args: {
     customizationType: string;
-    userData: unknown;
+    userData: Record<string, unknown>;
     surfaceId: string;
     request?: Request;
-    defaultValue?: unknown;
+    defaultValue?: K;
   }) {
-    const { customization } = await loadCustomization({
+    const { customization } = await loadCustomization<K>({
       ...args,
       baseUrl: this.baseUrl,
       apiKey: this.apiKey,

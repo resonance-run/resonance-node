@@ -473,6 +473,7 @@ describe('loadCustomization', () => {
       userData: { id: 123 },
       baseUrl: 'https://resonance.example.com',
       request,
+      defaultValue: {},
     });
     expect(customizations).toStrictEqual({
       customization: {},

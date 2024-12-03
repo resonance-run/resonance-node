@@ -1,8 +1,8 @@
 import { CustomizationResult } from '../loadCustomizations.js';
 
-export const customizationToFieldsObject = (
+export const customizationToFieldsObject = <K>(
   customization: CustomizationResult,
-) => {
+): K => {
   return Object.entries(customization?.variation?.fields || {}).reduce(
     (res, [key, { value, fields }]) => {
       if (value !== undefined && value !== '') {
