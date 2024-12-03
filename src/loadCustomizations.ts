@@ -33,22 +33,24 @@ interface LoadCustomizationsArgs<K> {
 
 interface LoadCustomizationArgs<K> {
   customizationType: string;
-  userData: K;
+  userData: Record<string, unknown>;
   baseUrl: string;
   surfaceId: string;
   apiKey?: string;
   clientId?: string;
   request?: Request;
-  defaultValue?: unknown;
+  defaultValue?: K;
 }
 
-export const loadCustomization = async <K>(args: LoadCustomizationArgs<K>) => {
-  const { defaultValue = {} } = args;
+export const loadCustomization = async <K>(
+  args: LoadCustomizationArgs<K>,
+): Promise<{ userData: Record<string, unknown>; customization: K }> => {
+  const { defaultValue } = args;
   try {
     const data = await fetchCustomizations(args);
 
     const customization = data.customizations[args.surfaceId]
-      ? customizationToFieldsObject(data.customizations[args.surfaceId])
+      ? customizationToFieldsObject<K>(data.customizations[args.surfaceId])
       : defaultValue;
     return { customization, userData: data.userData };
   } catch (error) {
@@ -57,7 +59,7 @@ export const loadCustomization = async <K>(args: LoadCustomizationArgs<K>) => {
     );
     // In case of an error, return an empty object instead of killing everything.
     console.error(error);
-    return { userData: args.userData, customization: defaultValue ?? {} };
+    return { userData: args.userData, customization: defaultValue };
   }
 };
 
