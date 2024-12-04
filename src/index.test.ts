@@ -109,6 +109,7 @@ describe('Resonance class', () => {
         userData,
         surfaceId,
         request,
+        timeout: 1234,
       });
       expect(loadCustomization).toHaveBeenLastCalledWith({
         customizationType,
@@ -116,6 +117,7 @@ describe('Resonance class', () => {
         surfaceId,
         baseUrl,
         request,
+        timeout: 1234,
         apiKey: undefined,
         clientId: undefined,
         defaultValue: undefined,

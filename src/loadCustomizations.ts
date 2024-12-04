@@ -41,6 +41,7 @@ interface LoadCustomizationArgs<K> {
   clientId?: string;
   request?: Request;
   defaultValue?: K;
+  timeout?: number;
 }
 
 export const loadCustomization = async <K>(

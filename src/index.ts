@@ -45,6 +45,7 @@ export default class Resonance {
     surfaceId: string;
     request?: Request;
     defaultValue?: K;
+    timeout?: number;
   }) {
     const { customization } = await loadCustomization<K>({
       ...args,
@@ -61,12 +62,14 @@ export default class Resonance {
     surfaceId,
     request,
     defaultValue,
+    timeout,
   }: {
     customizationType: string;
     userData: unknown;
     surfaceId?: string;
     request?: Request;
     defaultValue?: K;
+    timeout?: number;
   }) {
     return loadCustomizations({
       customizationType,
@@ -77,6 +80,7 @@ export default class Resonance {
       apiKey: this.apiKey,
       clientId: this.clientId,
       defaultValue,
+      timeout,
     });
   }
 

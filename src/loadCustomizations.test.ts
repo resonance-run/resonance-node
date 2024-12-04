@@ -44,6 +44,7 @@ describe('loadCustomizations', () => {
       userData,
       baseUrl: 'https://resonance.example.com',
       request,
+      timeout: 2345,
     });
     const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
@@ -344,6 +345,7 @@ describe('loadCustomization', () => {
       baseUrl: 'https://resonance.example.com',
       surfaceId: 'surfaceOne',
       request,
+      timeout: 3003,
     });
     const expectedUrl = `https://resonance.example.com/customizations`;
     expect(fetch).toHaveBeenCalled();
