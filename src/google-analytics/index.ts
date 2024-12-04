@@ -20,7 +20,7 @@ export const triggerGAImpressionEvent = async ({
       fetch(
         `https://www.google-analytics.com/mp/collect?measurement_id=${gaTrackingId}&api_secret=${gaAPISecret}`,
         {
-          signal: AbortSignal.timeout(1000),
+          signal: AbortSignal.timeout(3000),
           method: 'POST',
           body: JSON.stringify({
             client_id: gaClientId,
@@ -41,7 +41,7 @@ export const triggerGAImpressionEvent = async ({
       fetch(
         `https://www.google-analytics.com/mp/collect?measurement_id=${gaTrackingId}&api_secret=${gaAPISecret}`,
         {
-          signal: AbortSignal.timeout(1000),
+          signal: AbortSignal.timeout(3000),
           method: 'POST',
           body: JSON.stringify({
             client_id: gaClientId,

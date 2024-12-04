@@ -29,6 +29,7 @@ interface LoadCustomizationsArgs<K> {
   clientId?: string;
   request?: Request;
   defaultValue?: unknown;
+  timeout?: number;
 }
 
 interface LoadCustomizationArgs<K> {
@@ -44,7 +45,7 @@ interface LoadCustomizationArgs<K> {
 
 export const loadCustomization = async <K>(
   args: LoadCustomizationArgs<K>,
-): Promise<{ userData: Record<string, unknown>; customization: K }> => {
+): Promise<{ userData: Record<string, unknown>; customization?: K }> => {
   const { defaultValue } = args;
   try {
     const data = await fetchCustomizations(args);
@@ -101,6 +102,7 @@ export const loadCustomizations = async <K>(
   }
 };
 
+const DEFAULT_TIMEOUT = 1000;
 const fetchCustomizations = async <K>({
   request,
   userData,
@@ -109,6 +111,7 @@ const fetchCustomizations = async <K>({
   apiKey,
   clientId,
   baseUrl,
+  timeout = DEFAULT_TIMEOUT,
 }: Omit<LoadCustomizationsArgs<K>, 'defaultValue'>) => {
   let previewOverrideCookie;
   if (typeof window === 'object') {
@@ -130,7 +133,7 @@ const fetchCustomizations = async <K>({
   };
   const fullUrl = `${baseUrl}/customizations`;
   const res = await fetch(fullUrl, {
-    signal: AbortSignal.timeout(500),
+    signal: AbortSignal.timeout(timeout),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
