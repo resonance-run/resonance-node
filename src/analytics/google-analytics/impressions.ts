@@ -1,4 +1,4 @@
-import { CustomizationResult } from '../loadCustomizations.js';
+import { CustomizationResult } from '../../loadCustomizations.js';
 
 const IMPRESSION_EVENT_NAME = 'resonance_impression';
 const EXPERIENCE_IMPRESSION = 'experience_impression';
