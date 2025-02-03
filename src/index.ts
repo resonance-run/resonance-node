@@ -1,7 +1,8 @@
 import {
   triggerGABrowserImpressionEvent,
   triggerGAImpressionEvent,
-} from './google-analytics/index.js';
+} from './analytics/google-analytics/impressions.js';
+import { triggerStatSigImpressionEvent } from './analytics/stat-sig/impressions.js';
 import {
   loadCustomizations,
   CustomizationResult,
@@ -15,6 +16,8 @@ export default class Resonance {
   private clientId: string;
   private gaTrackingId: string;
   private gaAPISecret: string;
+  private gaClientId: string;
+  private statSigApiKey: string;
 
   private isBrowser = typeof window === 'object';
 
@@ -34,9 +37,14 @@ export default class Resonance {
     }
   }
 
-  initGA(trackingId: string, APISecret: string) {
+  initGA(trackingId: string, APISecret: string, clientId: string) {
     this.gaTrackingId = trackingId;
     this.gaAPISecret = APISecret;
+    this.gaClientId = clientId;
+  }
+
+  initStatSig(apiKey: string) {
+    this.statSigApiKey = apiKey;
   }
 
   async loadCustomization<K>(args: {
@@ -47,12 +55,13 @@ export default class Resonance {
     defaultValue?: K;
     timeout?: number;
   }) {
-    const { customization } = await loadCustomization<K>({
+    const { customization, rawCustomization } = await loadCustomization<K>({
       ...args,
       baseUrl: this.baseUrl,
       apiKey: this.apiKey,
       clientId: this.clientId,
     });
+    this.triggerAnalytics(rawCustomization, args.userData);
     return customization;
   }
 
@@ -88,6 +97,28 @@ export default class Resonance {
     return customizationToFieldsObject(customization);
   }
 
+  triggerAnalytics(customization: CustomizationResult, userData: unknown) {
+    const userId = (
+      typeof userData === 'object' && 'id' in userData ? userData.id : undefined
+    ) as string | number;
+    if (this.gaTrackingId) {
+      triggerGAImpressionEvent({
+        customization,
+        userId,
+        gaClientId: this.gaClientId,
+        gaAPISecret: this.gaAPISecret,
+        gaTrackingId: this.gaTrackingId,
+      });
+    }
+    if (this.statSigApiKey) {
+      triggerStatSigImpressionEvent({
+        customization,
+        userId,
+        statSigApiKey: this.statSigApiKey,
+      });
+    }
+  }
+
   triggerGAImpressionEvent({
     customization,
     userId,
@@ -95,7 +126,7 @@ export default class Resonance {
     gtag,
   }: {
     customization: CustomizationResult;
-    userId: string | number;
+    userId?: string | number;
     gaClientId?: string;
     gtag?: (...args: unknown[]) => void;
   }) {

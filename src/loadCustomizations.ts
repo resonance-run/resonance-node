@@ -46,22 +46,34 @@ interface LoadCustomizationArgs<K> {
 
 export const loadCustomization = async <K>(
   args: LoadCustomizationArgs<K>,
-): Promise<{ userData: Record<string, unknown>; customization?: K }> => {
+): Promise<{
+  userData: Record<string, unknown>;
+  customization?: K;
+  rawCustomization: CustomizationResult;
+}> => {
   const { defaultValue } = args;
   try {
     const data = await fetchCustomizations(args);
 
-    const customization = data.customizations[args.surfaceId]
+    const customization = data.customizations?.[args.surfaceId]
       ? customizationToFieldsObject<K>(data.customizations[args.surfaceId])
       : defaultValue;
-    return { customization, userData: data.userData };
+    return {
+      customization,
+      rawCustomization: data.customizations?.[args.surfaceId],
+      userData: data.userData,
+    };
   } catch (error) {
     console.log(
       'An error occurred in the Resonance Node SDK while trying to load customizations:',
     );
     // In case of an error, return an empty object instead of killing everything.
     console.error(error);
-    return { userData: args.userData, customization: defaultValue };
+    return {
+      userData: args.userData,
+      customization: defaultValue,
+      rawCustomization: undefined,
+    };
   }
 };
 

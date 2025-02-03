@@ -1,9 +1,8 @@
-import type { CustomizationResult } from '../loadCustomizations.js';
-
 import {
   triggerGABrowserImpressionEvent,
   triggerGAImpressionEvent,
-} from './index.js';
+} from '~/analytics/google-analytics/impressions.js';
+import { CustomizationResult } from '~/loadCustomizations.js';
 
 describe('Google Analytics events', () => {
   const customization: CustomizationResult = {

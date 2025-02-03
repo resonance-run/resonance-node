@@ -5,6 +5,22 @@ import Cookies from '../__mocks__/js-cookie.js';
 import { loadCustomization, loadCustomizations } from './loadCustomizations.js';
 
 vi.mock('js-cookie');
+const mockCustomizationResults = {
+  surfaceOne: {
+    name: 'A name',
+    surfaceId: 'surfaceOne',
+    variation: {
+      fields: {
+        stringValue: { value: 'This is a string' },
+        imageValue: {
+          value: 'https://example.com/image.jpg',
+        },
+        ctaValue: { value: '' },
+        bullets: { value: [''] },
+      },
+    },
+  },
+};
 describe('loadCustomizations', () => {
   beforeEach(() => {
     vi.stubGlobal(
@@ -12,22 +28,7 @@ describe('loadCustomizations', () => {
       vi.fn().mockResolvedValue({
         json: vi.fn().mockResolvedValue({
           userData: {},
-          customizations: {
-            surfaceOne: {
-              name: 'A name',
-              surfaceId: 'surfaceOne',
-              variation: {
-                fields: {
-                  stringValue: { value: 'This is a string' },
-                  imageValue: {
-                    value: 'https://example.com/image.jpg',
-                  },
-                  ctaValue: { value: '' },
-                  bullets: { value: [''] },
-                },
-              },
-            },
-          },
+          customizations: mockCustomizationResults,
         }),
       }),
     );
@@ -447,7 +448,7 @@ describe('loadCustomization', () => {
 
   test('Returns a single customization', async () => {
     const request = new Request('https://resonance.example.com');
-    const customization = await loadCustomization({
+    const { customization, rawCustomization } = await loadCustomization({
       customizationType: 'resonance-copy',
       surfaceId: 'surfaceOne',
       userData: { id: 123 },
@@ -455,13 +456,11 @@ describe('loadCustomization', () => {
       request,
     });
     expect(customization).toEqual({
-      customization: {
-        bullets: [''],
-        stringValue: 'This is a string',
-        imageValue: 'https://example.com/image.jpg',
-      },
-      userData: {},
+      bullets: [''],
+      stringValue: 'This is a string',
+      imageValue: 'https://example.com/image.jpg',
     });
+    expect(rawCustomization).toEqual(mockCustomizationResults.surfaceOne);
   });
 
   test('it does not merge default values with the customization values', async () => {
@@ -485,6 +484,7 @@ describe('loadCustomization', () => {
         imageValue: 'https://example.com/image.jpg',
         bullets: [''],
       },
+      rawCustomization: mockCustomizationResults.surfaceOne,
       userData: {},
     });
   });
@@ -510,6 +510,7 @@ describe('loadCustomization', () => {
     });
     expect(customizations).toStrictEqual({
       customization: {},
+      rawCustomization: undefined,
       userData: { id: 123 },
     });
   });
@@ -539,6 +540,7 @@ describe('loadCustomization', () => {
       customization: {
         a: 'bcdef',
       },
+      rawCustomization: undefined,
       userData: { id: 123 },
     });
   });
@@ -580,7 +582,37 @@ describe('loadCustomization', () => {
       customization: {
         a: 'bcdef',
       },
+      rawCustomization: undefined,
       userData: {},
+    });
+  });
+
+  test('Returns the default value if the result is empty', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        json: vi.fn().mockResolvedValue(undefined),
+      }),
+    );
+
+    const request = new Request('https://resonance.example.com');
+    const customizations = await loadCustomization({
+      customizationType: 'resonance-copy',
+      surfaceId: 'surfaceOne',
+      userData: { id: 123 },
+      baseUrl: 'https://resonance.example.com',
+      defaultValue: {
+        a: 'bcdef',
+      },
+      request,
+    });
+
+    expect(customizations).toStrictEqual({
+      customization: {
+        a: 'bcdef',
+      },
+      rawCustomization: undefined,
+      userData: { id: 123 },
     });
   });
 });
