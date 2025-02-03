@@ -15,7 +15,6 @@ export const triggerStatSigImpressionEvent = ({
 }) => {
   const headers = new Headers();
   headers.append('STATSIG-API-KEY', statSigApiKey);
-  console.log('timestamp', Date.now());
   return fetch(statSigImpressionUrl, {
     method: 'POST',
     headers,
