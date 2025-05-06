@@ -129,7 +129,7 @@ const fetchCustomizations = async <K>({
   let previewOverrideCookie;
   if (typeof window === 'object') {
     previewOverrideCookie = Cookies.get(PREVIEW_COOKIE_NAME);
-  } else {
+  } else if (request) {
     const parsedCookies = parse(request.headers.get('cookie') || '');
     previewOverrideCookie = parsedCookies?.[PREVIEW_COOKIE_NAME];
     previewOverrideCookie = previewOverrideCookie
